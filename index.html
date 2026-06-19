@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prime Store | Calçados Femininos</title>
+    
     <style>
         /* Cores da Identidade: Rosa Boutique & Branco Puro */
         :root {
@@ -171,4 +172,545 @@
         .produto-card .categoria {
             font-size: 0.85rem;
             color: var(--rosa-escuro);
-            text-transform: uppercase
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .preco {
+            font-size: 1.6rem;
+            color: var(--texto-escuro);
+            font-weight: 800;
+            margin: 10px 0;
+        }
+
+        /* Área de Opções Customizada */
+        .produto-opcoes {
+            width: 90%;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .opcao-titulo {
+            font-size: 0.8rem;
+            color: var(--texto-suave);
+            font-weight: bold;
+            text-align: left;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        /* Grade de Botões de Tamanho */
+        .tamanhos-grid {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-tamanho {
+            background-color: var(--branco);
+            border: 2px solid rgba(255, 143, 163, 0.3);
+            color: var(--texto-escuro);
+            padding: 8px 14px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-tamanho:hover {
+            border-color: var(--rosa-principal);
+            color: var(--rosa-escuro);
+        }
+
+        /* Classe que será aplicada via JavaScript quando clicado */
+        .btn-tamanho.selecionado {
+            background-color: var(--rosa-principal);
+            border-color: var(--rosa-principal);
+            color: white;
+        }
+
+        /* Campo de Quantidade Ajustado */
+        .quantidade-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .quantidade-container input {
+            width: 60px;
+            padding: 8px;
+            border: 1px solid rgba(255, 143, 163, 0.3);
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .quantidade-container input:focus {
+            border-color: var(--rosa-escuro);
+        }
+
+        /* Botão Adicionar ao Carrinho */
+        .btn-comprar {
+            background-color: var(--rosa-principal);
+            color: var(--branco);
+            border: none;
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 90%;
+            box-sizing: border-box;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 5px 15px rgba(255, 143, 163, 0.3);
+        }
+
+        .btn-comprar:hover {
+            background-color: var(--rosa-escuro);
+            box-shadow: 0 8px 20px rgba(255, 77, 109, 0.4);
+        }
+
+        /* JANELA DO CARRINHO LATERAL */
+        .carrinho-lateral {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 380px;
+            max-width: 100%;
+            height: 100%;
+            background-color: var(--branco);
+            box-shadow: -5px 0 25px rgba(0,0,0,0.15);
+            z-index: 2000;
+            transition: right 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            padding: 25px;
+            box-sizing: border-box;
+        }
+
+        .carrinho-lateral.aberto {
+            right: 0;
+        }
+
+        .carrinho-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--rosa-claro);
+            padding-bottom: 15px;
+        }
+
+        .carrinho-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--texto-escuro);
+        }
+
+        .fechar-carrinho {
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            color: var(--texto-suave);
+            cursor: pointer;
+        }
+
+        .carrinho-itens {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px 0;
+        }
+
+        .item-no-carrinho {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            background: var(--rosa-claro);
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .item-info h4 {
+            margin: 0 0 5px 0;
+            font-size: 1rem;
+        }
+
+        .item-info p {
+            margin: 0;
+            color: var(--rosa-escuro);
+            font-weight: bold;
+        }
+
+        .item-detalhes {
+            font-size: 0.85rem;
+            color: var(--texto-suave);
+            display: block;
+            margin-top: 2px;
+        }
+
+        .btn-remover {
+            background: none;
+            border: none;
+            color: var(--rosa-escuro);
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .carrinho-footer {
+            border-top: 2px solid var(--rosa-claro);
+            padding-top: 20px;
+        }
+
+        .total-container {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .btn-finalizar {
+            background-color: #25d366;
+            color: white;
+            text-decoration: none;
+            padding: 15px;
+            border-radius: 30px;
+            display: block;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+            transition: background-color 0.2s;
+        }
+
+        .btn-finalizar:hover {
+            background-color: #20ba59;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            z-index: 1500;
+            display: none;
+        }
+
+        .overlay.aberto {
+            display: block;
+        }
+
+        .info-section {
+            background-color: var(--branco);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+            padding: 40px 20px;
+            margin-top: 50px;
+            border: 1px solid rgba(255, 143, 163, 0.1);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .info-bloco {
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .info-bloco h4 {
+            color: var(--rosa-escuro);
+            font-size: 1.2rem;
+            margin-top: 0;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+
+        .info-bloco p {
+            margin: 0;
+            color: var(--texto-suave);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: var(--texto-suave);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255, 143, 163, 0.2);
+            margin-top: 60px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="overlay" id="overlay" onclick="toggleCarrinho()"></div>
+
+    <header>
+        <svg class="logo-borboleta" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50,45 C43,20 12,15 18,45 C21,55 38,60 50,65 C62,60 79,55 82,45 C88,15 57,20 50,45 Z"/>
+            <path d="M50,50 C44,32 22,32 28,55 C31,63 42,68 50,72 C58,68 69,63 72,55 C78,32 56,32 50,50 Z" opacity="0.7"/>
+            <circle cx="50" cy="54" r="2.5" fill="#ffffff"/>
+            <path d="M50,42 Q46,32 41,30 M50,42 Q54,32 59,30" stroke="var(--rosa-principal)" stroke-width="2.5" fill="none"/>
+        </svg>
+        <h1 class="nome-loja">Prime Store</h1>
+        <span class="subtitulo">Sandálias Exclusivas</span>
+
+        <button class="carrinho-topo-btn" onclick="toggleCarrinho()">
+            🛒 Meu Carrinho <span class="contador-itens" id="contador-itens">0</span>
+        </button>
+    </header>
+
+    <div class="container">
+        
+        <div class="vitrine">
+            
+            <div class="produto-card" id="produto-1">
+                <div class="img-container">
+                    <img src="foto1.png" alt="Sandália Prime Modelo 01">
+                </div>
+                <h3>Sandália Prime</h3>
+                <div class="categoria">Modelo 01</div>
+                <div class="preco">R$ 129,99</div>
+                
+                <div class="produto-opcoes">
+                    <div>
+                        <span class="opcao-titulo">Escolha o Tamanho:</span>
+                        <div class="tamanhos-grid">
+                            <button class="btn-tamanho" onclick="selecionarTamanho(this, 'produto-1')">35</button>
+                            <button class="btn-tamanho" onclick="selecionarTamanho(this, 'produto-1')">36</button>
+                            <button class="btn-tamanho" onclick="selecionarTamanho(this, 'produto-1')">37</button>
+                            <button class="btn-tamanho" onclick="selecionarTamanho(this, 'produto-1')">38</button>
+                        </div>
+                    </div>
+                    
+                    <div class="quantidade-container">
+                        <span class="opcao-titulo" style="margin-bottom:0;">Qtd:</span>
+                        <input type="number" id="qtd-p1" value="1" min="1" max="10">
+                    </div>
+                </div>
+
+                <button class="btn-comprar" onclick="adicionarComOpcoes('Sandália Prime - Modelo 01', 129.99, 'produto-1', 'qtd-p1')">
+                    🛍️ Adicionar ao Carrinho
+                </button>
+            </div>
+            
+            <div class="produto-card" id="produto-2">
+                <div class="img-container">
+                    <img src="foto2.png" alt="Sandália Prime Modelo 02">
+                </div>
+                <h3>Sandália Prime</h3>
+                <div class="categoria">Modelo 02</div>
+                <div class="preco">R$ 119,90</div>
+                
+                <div class="produto-opcoes">
+                    <div>
+                        <span class="opcao-titulo">Escolha o Tamanho:</span>
+                        <div class="tamanhos-grid">
+                            <button class="btn-tamanho" onclick="selecionarTamanho(this, 'produto-2')">35</button>
+                            <button class="btn-tamanho" onclick="selecionarTamanho(this, 'produto-2')">36</button>
+                            <button class="btn-tamanho" onclick="selecionarTamanho(this, 'produto-2')">37</button>
+                            <button class="btn-tamanho" onclick="selecionarTamanho(this, 'produto-2')">38</button>
+                        </div>
+                    </div>
+                    
+                    <div class="quantidade-container">
+                        <span class="opcao-titulo" style="margin-bottom:0;">Qtd:</span>
+                        <input type="number" id="qtd-p2" value="1" min="1" max="10">
+                    </div>
+                </div>
+
+                <button class="btn-comprar" onclick="adicionarComOpcoes('Sandália Prime - Modelo 02', 119.90, 'produto-2', 'qtd-p2')">
+                    🛍️ Adicionar ao Carrinho
+                </button>
+            </div>
+
+        </div>
+
+        <div class="info-section">
+            <div class="info-grid">
+                <div class="info-bloco">
+                    <h4>Formas de Pagamento</h4>
+                    <p>Aceitamos Pix, Cartão de Crédito em até 3x e Boleto Bancário.</p>
+                </div>
+                <div class="info-bloco">
+                    <h4>Prazo e Envio</h4>
+                    <p>Enviamos para todo o Brasil via Correios. Entrega rápida e garantida.</p>
+                </div>
+                <div class="info-bloco">
+                    <h4>Atendimento</h4>
+                    <p>Ficou com dúvidas sobre tamanhos ou modelos? Chame nossa equipe agora mesmo.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="carrinho-lateral" id="carrinho-lateral">
+        <div class="carrinho-header">
+            <h2>🛒 Meu Carrinho</h2>
+            <button class="fechar-carrinho" onclick="toggleCarrinho()">&times;</button>
+        </div>
+
+        <div class="carrinho-itens" id="carrinho-itens-lista">
+            <p style="color:var(--texto-suave); text-align:center; margin-top:30px;">Seu carrinho está vazio.</p>
+        </div>
+
+        <div class="carrinho-footer">
+            <div class="total-container">
+                <span>Total:</span>
+                <span id="valor-total">R$ 0,00</span>
+            </div>
+            <a href="#" class="btn-finalizar" id="btn-enviar-whatsapp" onclick="finalizarPedido(event)">
+                ✅ Finalizar Pedido via WhatsApp
+            </a>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 Prime Store. Todos os direitos reservados.
+    </footer>
+
+    <script>
+        let carrinho = [];
+
+        function toggleCarrinho() {
+            document.getElementById('carrinho-lateral').classList.toggle('aberto');
+            document.getElementById('overlay').classList.toggle('aberto');
+        }
+
+        // Controla visualmente qual botão de tamanho está ativo dentro de cada card
+        function selecionarTamanho(botaoClicado, idCardProduto) {
+            const card = document.getElementById(idCardProduto);
+            // Remove a seleção de qualquer outro botão de tamanho deste card específico
+            const botoesDoCard = card.querySelectorAll('.btn-tamanho');
+            botoesDoCard.forEach(btn => btn.classList.remove('selecionado'));
+            
+            // Adiciona a classe selecionado apenas ao botão clicado
+            botaoClicado.classList.add('selecionado');
+        }
+
+        // Lê as opções selecionadas e valida se o tamanho foi escolhido
+        function adicionarComOpcoes(nome, preco, idCardProduto, idQuantidade) {
+            const card = document.getElementById(idCardProduto);
+            const botaoTamanhoSelecionado = card.querySelector('.btn-tamanho.selecionado');
+            
+            // Valida se o usuário clicou em algum tamanho
+            if (!botaoTamanhoSelecionado) {
+                alert("Por favor, selecione um tamanho (35 ao 38) antes de adicionar ao carrinho!");
+                return;
+            }
+
+            const tamanho = botaoTamanhoSelecionado.innerText;
+            const quantidade = parseInt(document.getElementById(idQuantidade).value) || 1;
+            
+            if (quantidade < 1) {
+                alert("Por favor, insira uma quantidade válida.");
+                return;
+            }
+
+            adicionarAoCarrinho(nome, preco, tamanho, quantidade);
+            
+            // Limpa a seleção do tamanho e reseta a quantidade após adicionar
+            botaoTamanhoSelecionado.classList.remove('selecionado');
+            document.getElementById(idQuantidade).value = 1;
+        }
+
+        function adicionarAoCarrinho(nome, preco, tamanho, quantidade) {
+            const itemExistente = carrinho.find(item => item.nome === nome && item.tamanho === tamanho);
+            
+            if (itemExistente) {
+                itemExistente.quantidade += quantidade;
+            } else {
+                carrinho.push({ 
+                    nome: nome, 
+                    preco: preco, 
+                    tamanho: tamanho, 
+                    quantidade: quantidade 
+                });
+            }
+            atualizarCarrinho();
+            toggleCarrinho();
+        }
+
+        function removerDoCarrinho(nome, tamanho) {
+            carrinho = carrinho.filter(item => !(item.nome === nome && item.tamanho === tamanho));
+            atualizarCarrinho();
+        }
+
+        function atualizarCarrinho() {
+            const listaElemento = document.getElementById('carrinho-itens-lista');
+            const contadorElemento = document.getElementById('contador-itens');
+            const totalElemento = document.getElementById('valor-total');
+            listaElemento.innerHTML = '';
+            
+            if (carrinho.length === 0) {
+                listaElemento.innerHTML = '<p style="color:var(--texto-suave); text-align:center; margin-top:30px;">Seu carrinho está vazio.</p>';
+                contadorElemento.innerText = '0';
+                totalElemento.innerText = 'R$ 0,00';
+                return;
+            }
+            
+            let totalGeral = 0;
+            let totalItens = 0;
+            
+            carrinho.forEach(item => {
+                totalGeral += item.preco * item.quantidade;
+                totalItens += item.quantidade;
+                listaElemento.innerHTML += `
+                    <div class="item-no-carrinho">
+                        <div class="item-info">
+                            <h4>${item.nome} (x${item.quantidade})</h4>
+                            <span class="item-detalhes">Tamanho: ${item.tamanho}</span>
+                            <p>R$ ${(item.preco * item.quantidade).toFixed(2).replace('.', ',')}</p>
+                        </div>
+                        <button class="btn-remover" onclick="removerDoCarrinho('${item.nome}', '${item.tamanho}')">Remover</button>
+                    </div>
+                `;
+            });
+            
+            contadorElemento.innerText = totalItens;
+            totalElemento.innerText = `R$ ${totalGeral.toFixed(2).replace('.', ',')}`;
+        }
+
+        function finalizarPedido(event) {
+            if (carrinho.length === 0) {
+                alert('Seu carrinho está vazio!');
+                event.preventDefault();
+                return;
+            }
+            let numeroTelefone = '5589981527374';
+            let textoMensagem = 'Olá, Prime Store! Gostaria de fazer o seguinte pedido:\n\n';
+            let totalGeral = 0;
+            
+            carrinho.forEach(item => {
+                textoMensagem += `• ${item.nome}\n  Tamanho: ${item.tamanho} | Qtd: ${item.quantidade} - R$ ${(item.preco * item.quantidade).toFixed(2).replace('.', ',')}\n\n`;
+                totalGeral += item.preco * item.quantidade;
+            });
+            
+            textoMensagem += `*Valor Total:* R$ ${totalGeral.toFixed(2).replace('.', ',')}`;
+            document.getElementById('btn-enviar-whatsapp').href = `https://wa.me/${numeroTelefone}?text=${encodeURIComponent(textoMensagem)}`;
+        }
+    </script>
+</body>
+</html>

@@ -184,41 +184,76 @@
             margin: 10px 0;
         }
 
-        /* Área de Opções (Tamanho e Qtd) */
+        /* Área de Opções Customizada */
         .produto-opcoes {
-            display: flex;
-            gap: 10px;
             width: 90%;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
 
-        .opcao-grupo {
-            flex: 1;
-            text-align: left;
-        }
-
-        .opcao-grupo label {
+        .opcao-titulo {
             font-size: 0.8rem;
             color: var(--texto-suave);
             font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
+            text-align: left;
             text-transform: uppercase;
+            margin-bottom: 5px;
+            display: block;
         }
 
-        .opcao-grupo select, .opcao-grupo input {
-            width: 100%;
-            padding: 10px;
+        /* Grade de Botões de Tamanho */
+        .tamanhos-grid {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-tamanho {
+            background-color: var(--branco);
+            border: 2px solid rgba(255, 143, 163, 0.3);
+            color: var(--texto-escuro);
+            padding: 8px 14px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-tamanho:hover {
+            border-color: var(--rosa-principal);
+            color: var(--rosa-escuro);
+        }
+
+        /* Classe que será aplicada via JavaScript quando clicado */
+        .btn-tamanho.selecionado {
+            background-color: var(--rosa-principal);
+            border-color: var(--rosa-principal);
+            color: white;
+        }
+
+        /* Campo de Quantidade Ajustado */
+        .quantidade-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .quantidade-container input {
+            width: 60px;
+            padding: 8px;
             border: 1px solid rgba(255, 143, 163, 0.3);
             border-radius: 8px;
-            background-color: var(--branco);
-            color: var(--texto-escuro);
+            text-align: center;
             font-weight: 600;
-            box-sizing: border-box;
+            font-size: 1rem;
             outline: none;
         }
 
-        .opcao-grupo select:focus, .opcao-grupo input:focus {
+        .quantidade-container input:focus {
             border-color: var(--rosa-escuro);
         }
 
@@ -449,7 +484,7 @@
         
         <div class="vitrine">
             
-            <div class="produto-card">
+            <div class="produto-card" id="produto-1">
                 <div class="img-container">
                     <img src="foto1.png" alt="Sandália Prime Modelo 01">
                 </div>
@@ -458,27 +493,28 @@
                 <div class="preco">R$ 129,99</div>
                 
                 <div class="produto-opcoes">
-                    <div class="opcao-grupo">
-                        <label for="tam-p1">Tam.</label>
-                        <select id="tam-p1">
-                            <option value="35">35</option>
-                            <option value="36">36</option>
-                            <option value="37">37</option>
-                            <option value="38">38</option>
-                        </select>
+                    <div>
+                        <span class="opcao-titulo">Escolha o Tamanho:</span>
+                        <div class="tamanhos-grid">
+                            <button class="btn-tamanho" onclick="selecionarTamanho(this, 'produto-1')">35</button>
+                            <button class="btn-tamanho" onclick="selecionarTamanho(this, 'produto-1')">36</button>
+                            <button class="btn-tamanho" onclick="selecionarTamanho(this, 'produto-1')">37</button>
+                            <button class="btn-tamanho" onclick="selecionarTamanho(this, 'produto-1')">38</button>
+                        </div>
                     </div>
-                    <div class="opcao-grupo">
-                        <label for="qtd-p1">Qtd.</label>
+                    
+                    <div class="quantidade-container">
+                        <span class="opcao-titulo" style="margin-bottom:0;">Qtd:</span>
                         <input type="number" id="qtd-p1" value="1" min="1" max="10">
                     </div>
                 </div>
 
-                <button class="btn-comprar" onclick="adicionarComOpcoes('Sandália Prime - Modelo 01', 129.99, 'tam-p1', 'qtd-p1')">
+                <button class="btn-comprar" onclick="adicionarComOpcoes('Sandália Prime - Modelo 01', 129.99, 'produto-1', 'qtd-p1')">
                     🛍️ Adicionar ao Carrinho
                 </button>
             </div>
             
-            <div class="produto-card">
+            <div class="produto-card" id="produto-2">
                 <div class="img-container">
                     <img src="foto2.png" alt="Sandália Prime Modelo 02">
                 </div>
@@ -487,22 +523,23 @@
                 <div class="preco">R$ 119,90</div>
                 
                 <div class="produto-opcoes">
-                    <div class="opcao-grupo">
-                        <label for="tam-p2">Tam.</label>
-                        <select id="tam-p2">
-                            <option value="35">35</option>
-                            <option value="36">36</option>
-                            <option value="37">37</option>
-                            <option value="38">38</option>
-                        </select>
+                    <div>
+                        <span class="opcao-titulo">Escolha o Tamanho:</span>
+                        <div class="tamanhos-grid">
+                            <button class="btn-tamanho" onclick="selecionarTamanho(this, 'produto-2')">35</button>
+                            <button class="btn-tamanho" onclick="selecionarTamanho(this, 'produto-2')">36</button>
+                            <button class="btn-tamanho" onclick="selecionarTamanho(this, 'produto-2')">37</button>
+                            <button class="btn-tamanho" onclick="selecionarTamanho(this, 'produto-2')">38</button>
+                        </div>
                     </div>
-                    <div class="opcao-grupo">
-                        <label for="qtd-p2">Qtd.</label>
+                    
+                    <div class="quantidade-container">
+                        <span class="opcao-titulo" style="margin-bottom:0;">Qtd:</span>
                         <input type="number" id="qtd-p2" value="1" min="1" max="10">
                     </div>
                 </div>
 
-                <button class="btn-comprar" onclick="adicionarComOpcoes('Sandália Prime - Modelo 02', 119.90, 'tam-p2', 'qtd-p2')">
+                <button class="btn-comprar" onclick="adicionarComOpcoes('Sandália Prime - Modelo 02', 119.90, 'produto-2', 'qtd-p2')">
                     🛍️ Adicionar ao Carrinho
                 </button>
             </div>
@@ -561,25 +598,44 @@
             document.getElementById('overlay').classList.toggle('aberto');
         }
 
-        // Função intermediária para ler as opções antes de adicionar
-        function adicionarComOpcoes(nome, preco, idTamanho, idQuantidade) {
-            const tamanho = document.getElementById(idTamanho).value;
+        // Controla visualmente qual botão de tamanho está ativo dentro de cada card
+        function selecionarTamanho(botaoClicado, idCardProduto) {
+            const card = document.getElementById(idCardProduto);
+            // Remove a seleção de qualquer outro botão de tamanho deste card específico
+            const botoes do Card = card.querySelectorAll('.btn-tamanho');
+            botoes do Card.forEach(btn => btn.classList.remove('selecionado'));
+            
+            // Adiciona a classe selecionado apenas ao botão clicado
+            botaoClicado.classList.add('selecionado');
+        }
+
+        // Lê as opções selecionadas e valida se o tamanho foi escolhido
+        function adicionarComOpcoes(nome, preco, idCardProduto, idQuantidade) {
+            const card = document.getElementById(idCardProduto);
+            const botaoTamanhoSelecionado = card.querySelector('.btn-tamanho.selecionado');
+            
+            // Valida se o usuário clicou em algum tamanho
+            if (!botaoTamanhoSelecionado) {
+                alert("Por favor, selecione um tamanho (35 ao 38) antes de adicionar ao carrinho!");
+                return;
+            }
+
+            const tamanho = botaoTamanhoSelecionado.innerText;
             const quantidade = parseInt(document.getElementById(idQuantidade).value) || 1;
             
-            // Validação simples para evitar números negativos ou zero
             if (quantidade < 1) {
-                alert("Por favor, selecione uma quantidade válida.");
+                alert("Por favor, insira uma quantidade válida.");
                 return;
             }
 
             adicionarAoCarrinho(nome, preco, tamanho, quantidade);
             
-            // Reseta a quantidade do card de volta para 1 após a compra
+            // Opcional: Limpa a seleção do tamanho e reseta a quantidade após adicionar
+            botaoTamanhoSelecionado.classList.remove('selecionado');
             document.getElementById(idQuantidade).value = 1;
         }
 
         function adicionarAoCarrinho(nome, preco, tamanho, quantidade) {
-            // Agora validamos se já existe o MESMO item com o MESMO tamanho
             const itemExistente = carrinho.find(item => item.nome === nome && item.tamanho === tamanho);
             
             if (itemExistente) {

@@ -552,7 +552,6 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 </head>
-</head>
 <body>
 
     <div class="overlay" id="overlay" onclick="toggleCarrinho()"></div>
@@ -762,17 +761,13 @@
     <footer>&copy; 2026 Prime Store. Todos os direitos reservados.</footer>
 
     <script>
-        // CONFIGURAÇÃO DO CONFIG DO FIREBASE (Troque pelo link do seu Realtime Database)
+        // CONFIGURAÇÃO DO FIREBASE
         const firebaseConfig = {
-            databaseURL: "https://console.firebase.google.com/u/0/project/prime-store-53b31/database/prime-store-53b31-default-rtdb/data/~2F"
+            databaseURL: "https://prime-store-53b31-default-rtdb.firebaseio.com/"
         };
         
-        // Inicializa se o link estiver configurado, senão usa modo simulação local
-        let database = null;
-        if(firebaseConfig.databaseURL && !firebaseConfig.databaseURL.includes("COLOQUE_AQUI")) {
-            firebase.initializeApp(firebaseConfig);
-            database = firebase.database();
-        }
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
 
         let carrinho = [];
         let estoque = {
@@ -783,58 +778,24 @@
         };
 
         window.onload = function() {
-            if(database) {
-                // Escuta atualizações do Firebase em tempo real (atualiza o cliente na hora)
-                database.ref('estoque').on('value', (snapshot) => {
-                    if(snapshot.exists()) {
-                        estoque = snapshot.val();
-                        atualizarInterfaceEstoque();
-                        preencherCamposPainel();
-                    } else {
-                        database.ref('estoque').set(estoque);
-                    }
-                });
-            } else {
-                if(localStorage.getItem('estoquePrime')) {
-                    estoque = JSON.parse(localStorage.getItem('estoquePrime'));
+            database.ref('estoque').on('value', (snapshot) => {
+                if(snapshot.exists()) {
+                    estoque = snapshot.val();
+                    atualizarInterfaceEstoque();
+                    preencherCamposPainel();
+                } else {
+                    database.ref('estoque').set(estoque);
                 }
-                atualizarInterfaceEstoque();
-                preencherCamposPainel();
-            }
+            });
         }
 
-        function sincronizarEstoque() {
-            if(database) {
-                database.ref('estoque').set(estoque);
-            } else {
-                localStorage.setItem('estoquePrime', JSON.stringify(estoque));
-                atualizarInterfaceEstoque();
-            }
+        function toggleCarrinho() {
+            document.getElementById('carrinho-lateral').classList.toggle('aberto');
+            document.getElementById('overlay').classList.toggle('aberto');
         }
 
-        // LÓGICA DE REGISTRO DE VENDA MANUAL (DIGITANDO QUAL FOI VENDIDA)
-        function registrarVendaDireta() {
-            const idProd = document.getElementById('venda-produto').value;
-            const tamanho = document.getElementById('venda-tamanho').value;
-            const qtdVendida = parseInt(document.getElementById('venda-qtd').value) || 0;
-
-            if(qtdVendida < 1) {
-                alert("Insira uma quantidade de venda válida!");
-                return;
-            }
-
-            const estoqueAtual = estoque[idProd][tamanho];
-            if(qtdVendida > estoqueAtual) {
-                alert(`Erro: Você tentou vender ${qtdVendida} unidades, mas o estoque atual do tamanho ${tamanho} é de apenas ${estoqueAtual} unidades.`);
-                return;
-            }
-
-            // Subtrai do estoque a numeração indicada
-            estoque[idProd][tamanho] -= qtdVendida;
-            sincronizarEstoque();
-            
-            alert("Baixa de venda registrada com sucesso e sincronizada!");
-            document.getElementById('venda-qtd').value = 1;
+        function togglePainelAdmin() {
+            document.getElementById('admin-painel').classList.toggle('visivel');
         }
 
         function atualizarInterfaceEstoque() {
@@ -847,7 +808,7 @@
                 
                 botoes.forEach(btn => {
                     const tam = btn.getAttribute('data-tamanho');
-                    const qtdDisponivel = estoque[idProd][tam];
+                    const qtdDisponivel = estoque[idProd][tam] || 0;
                     
                     if (qtdDisponivel <= 0) {
                         btn.disabled = true;
@@ -871,169 +832,94 @@
 
         function selecionarTamanho(botaoClicado, idCardProduto) {
             const card = document.getElementById(idCardProduto);
-            const botoesDoCard = card.querySelectorAll('.btn-tamanho');
-            botoesDoCard.forEach(btn => btn.classList.remove('selecionado'));
+            card.querySelectorAll('.btn-tamanho').forEach(btn => btn.classList.remove('selecionado'));
             botaoClicado.classList.add('selecionado');
         }
 
         function adicionarComOpcoes(nome, preco, idCardProduto, idQuantidade) {
             const card = document.getElementById(idCardProduto);
-            const botaoTamanhoSelecionado = card.querySelector('.btn-tamanho.selecionado');
+            const btnTamanho = card.querySelector('.btn-tamanho.selecionado');
+            if(!btnTamanho) { alert("Selecione o tamanho!"); return; }
             
-            if (!botaoTamanhoSelecionado) {
-                alert("Por favor, selecione um tamanho antes de adicionar ao carrinho!");
+            const tamanho = btnTamanho.dataset.tamanho;
+            const qtd = parseInt(document.getElementById(idQuantidade).value);
+
+            if(qtd > estoque[idCardProduto][tamanho]) {
+                alert("Quantidade indisponível no estoque!");
                 return;
             }
 
-            const tamanho = botaoTamanhoSelecionado.innerText;
-            const quantidadeDesejada = parseInt(document.getElementById(idQuantidade).value) || 1;
-            
-            if (quantidadeDesejada < 1) {
-                alert("Por favor, insira uma quantidade válida.");
-                return;
-            }
-
-            const estoqueDisponivel = estoque[idCardProduto][tamanho];
-            if (quantidadeDesejada > estoqueDisponivel) {
-                alert(`Desculpe! Temos apenas ${estoqueDisponivel} unidades do tamanho ${tamanho} em estoque.`);
-                return;
-            }
-
-            adicionarAoCarrinho(nome, preco, tamanho, quantidadeDesejada, idCardProduto);
-            botaoTamanhoSelecionado.classList.remove('selecionado');
-            document.getElementById(idQuantidade).value = 1;
-        }
-
-        function adicionarAoCarrinho(nome, preco, tamanho, quantidade, idCardProduto) {
-            const itemExistente = carrinho.find(item => item.nome === nome && item.tamanho === tamanho);
-            if (itemExistente) {
-                itemExistente.quantidade += quantidade;
-            } else {
-                carrinho.push({ nome: nome, preco: preco, tamanho: tamanho, quantidade: quantidade, idCardProduto: idCardProduto });
-            }
-            atualizarCarrinho();
+            carrinho.push({ nome, preco, tamanho, qtd, id: idCardProduto });
+            atualizarCarrinhoUI();
             toggleCarrinho();
         }
 
-        function removerDoCarrinho(nome, tamanho) {
-            carrinho = carrinho.filter(item => !(item.nome === nome && item.tamanho === tamanho));
-            atualizarCarrinho();
-        }
-
-        function atualizarCarrinho() {
-            const listaElemento = document.getElementById('carrinho-itens-lista');
-            const contadorElemento = document.getElementById('contador-itens');
-            const totalElemento = document.getElementById('valor-total');
-            listaElemento.innerHTML = '';
+        function atualizarCarrinhoUI() {
+            const lista = document.getElementById('carrinho-itens-lista');
+            lista.innerHTML = "";
+            let total = 0;
             
-            if (carrinho.length === 0) {
-                listaElemento.innerHTML = '<p style="color:var(--texto-suave); text-align:center; margin-top:30px;">Seu carrinho está vazio.</p>';
-                contadorElemento.innerText = '0';
-                totalElemento.innerText = 'R$ 0,00';
-                return;
-            }
-            
-            let totalGeral = 0;
-            let totalItens = 0;
-            
-            carrinho.forEach(item => {
-                totalGeral += item.preco * item.quantidade;
-                totalItens += item.quantidade;
-                listaElemento.innerHTML += `
+            carrinho.forEach((item, index) => {
+                total += item.preco * item.qtd;
+                lista.innerHTML += `
                     <div class="item-no-carrinho">
                         <div class="item-info">
-                            <h4>${item.nome} (x${item.quantidade})</h4>
-                            <span class="item-detalhes">Tamanho: ${item.tamanho}</span>
-                            <p>R$ ${(item.preco * item.quantidade).toFixed(2).replace('.', ',')}</p>
+                            <h4>${item.nome}</h4>
+                            <span class="item-detalhes">Tam: ${item.tamanho} | Qtd: ${item.qtd}</span>
+                            <p>R$ ${(item.preco * item.qtd).toFixed(2)}</p>
                         </div>
-                        <button class="btn-remover" onclick="removerDoCarrinho('${item.nome}', '${item.tamanho}')">Remover</button>
+                        <button class="btn-remover" onclick="removerDoCarrinho(${index})">Remover</button>
                     </div>
                 `;
             });
-            
-            contadorElemento.innerText = totalItens;
-            totalElemento.innerText = `R$ ${totalGeral.toFixed(2).replace('.', ',')}`;
+            document.getElementById('valor-total').innerText = "R$ " + total.toFixed(2);
+            document.getElementById('contador-itens').innerText = carrinho.length;
         }
 
-        function finalizarPedido(event) {
-            if (carrinho.length === 0) {
-                alert('Seu carrinho está vazio!');
-                event.preventDefault();
-                return;
+        function removerDoCarrinho(index) {
+            carrinho.splice(index, 1);
+            atualizarCarrinhoUI();
+        }
+
+        function registrarVendaDireta() {
+            const id = document.getElementById('venda-produto').value;
+            const tam = document.getElementById('venda-tamanho').value;
+            const qtd = parseInt(document.getElementById('venda-qtd').value);
+            
+            if(estoque[id][tam] >= qtd) {
+                estoque[id][tam] -= qtd;
+                database.ref('estoque').set(estoque);
+                alert("Baixa realizada!");
+            } else {
+                alert("Estoque insuficiente!");
             }
-
-            // IMPORTANTE: Nenhuma baixa automática acontece aqui para não dar erro se o cliente desistir.
-            let numeroTelefone = '5589981527374';
-            let textoMensagem = 'Olá, Prime Store! Gostaria de fazer o seguinte pedido:\n\n';
-            let totalGeral = 0;
-            
-            carrinho.forEach(item => {
-                textoMensagem += `• ${item.nome}\n  Tamanho: ${item.tamanho} | Qtd: ${item.quantidade} - R$ ${(item.preco * item.quantidade).toFixed(2).replace('.', ',')}\n\n`;
-                totalGeral += item.preco * item.quantidade;
-            });
-            
-            textoMensagem += `*Valor Total:* R$ ${totalGeral.toFixed(2).replace('.', ',')}`;
-            carrinho = [];
-            atualizarCarrinho();
-            toggleCarrinho();
-
-            document.getElementById('btn-enviar-whatsapp').href = `https://wa.me/${numeroTelefone}?text=${encodeURIComponent(textoMensagem)}`;
-        }
-
-        function toggleCarrinho() {
-            document.getElementById('carrinho-lateral').classList.toggle('aberto');
-            document.getElementById('overlay').classList.toggle('aberto');
-        }
-
-        function togglePainelAdmin() {
-            document.getElementById('admin-painel').classList.toggle('visivel');
         }
 
         function preencherCamposPainel() {
-            document.getElementById('est-p1-35').value = estoque["produto-1"]["35"];
-            document.getElementById('est-p1-36').value = estoque["produto-1"]["36"];
-            document.getElementById('est-p1-37').value = estoque["produto-1"]["37"];
-            document.getElementById('est-p1-38').value = estoque["produto-1"]["38"];
-
-            document.getElementById('est-p2-35').value = estoque["produto-2"]["35"];
-            document.getElementById('est-p2-36').value = estoque["produto-2"]["36"];
-            document.getElementById('est-p2-37').value = estoque["produto-2"]["37"];
-            document.getElementById('est-p2-38').value = estoque["produto-2"]["38"];
-
-            document.getElementById('est-p3-35').value = estoque["produto-3"]["35"];
-            document.getElementById('est-p3-36').value = estoque["produto-3"]["36"];
-            document.getElementById('est-p3-37').value = estoque["produto-3"]["37"];
-            document.getElementById('est-p3-38').value = estoque["produto-3"]["38"];
-
-            document.getElementById('est-p4-35').value = estoque["produto-4"]["35"];
-            document.getElementById('est-p4-36').value = estoque["produto-4"]["36"];
-            document.getElementById('est-p4-37').value = estoque["produto-4"]["37"];
-            document.getElementById('est-p4-38').value = estoque["produto-4"]["38"];
+            for(let id in estoque) {
+                for(let tam in estoque[id]) {
+                    const el = document.getElementById(`est-${id}-${tam}`);
+                    if(el) el.value = estoque[id][tam];
+                }
+            }
         }
 
         function salvarEstoquePainel() {
-            estoque["produto-1"]["35"] = parseInt(document.getElementById('est-p1-35').value) || 0;
-            estoque["produto-1"]["36"] = parseInt(document.getElementById('est-p1-36').value) || 0;
-            estoque["produto-1"]["37"] = parseInt(document.getElementById('est-p1-37').value) || 0;
-            estoque["produto-1"]["38"] = parseInt(document.getElementById('est-p1-38').value) || 0;
+            for(let id in estoque) {
+                for(let tam in estoque[id]) {
+                    const val = document.getElementById(`est-${id}-${tam}`).value;
+                    estoque[id][tam] = parseInt(val);
+                }
+            }
+            database.ref('estoque').set(estoque);
+            alert("Estoque atualizado no Firebase!");
+        }
 
-            estoque["produto-2"]["35"] = parseInt(document.getElementById('est-p2-35').value) || 0;
-            estoque["produto-2"]["36"] = parseInt(document.getElementById('est-p2-36').value) || 0;
-            estoque["produto-2"]["37"] = parseInt(document.getElementById('est-p2-37').value) || 0;
-            estoque["produto-2"]["38"] = parseInt(document.getElementById('est-p2-38').value) || 0;
-
-            estoque["produto-3"]["35"] = parseInt(document.getElementById('est-p3-35').value) || 0;
-            estoque["produto-3"]["36"] = parseInt(document.getElementById('est-p3-36').value) || 0;
-            estoque["produto-3"]["37"] = parseInt(document.getElementById('est-p3-37').value) || 0;
-            estoque["produto-3"]["38"] = parseInt(document.getElementById('est-p3-38').value) || 0;
-
-            estoque["produto-4"]["35"] = parseInt(document.getElementById('est-p4-35').value) || 0;
-            estoque["produto-4"]["36"] = parseInt(document.getElementById('est-p4-36').value) || 0;
-            estoque["produto-4"]["37"] = parseInt(document.getElementById('est-p4-37').value) || 0;
-            estoque["produto-4"]["38"] = parseInt(document.getElementById('est-p4-38').value) || 0;
-
-            sincronizarEstoque();
-            alert("Alterações manuais salvas com sucesso!");
+        function finalizarPedido(e) {
+            e.preventDefault();
+            let msg = "Olá! Gostaria de comprar:%0A";
+            carrinho.forEach(i => msg += `- ${i.nome} (Tam ${i.tamanho}, Qtd ${i.qtd})%0A`);
+            window.open(`https://wa.me/55SEUNUMERO?text=${msg}`, '_blank');
         }
     </script>
 </body>

@@ -25,7 +25,6 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Topo Premium Ajustado para Celular e Computador */
         header {
             background-color: var(--branco);
             text-align: center;
@@ -117,7 +116,6 @@
             padding: 40px 20px;
         }
 
-        /* Vitrine Profissional com Grid Moderno */
         .vitrine {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
@@ -138,6 +136,7 @@
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
+            position: relative;
         }
 
         .produto-card:hover {
@@ -185,7 +184,6 @@
             margin: 10px 0;
         }
 
-        /* Área de Opções Customizada */
         .produto-opcoes {
             width: 90%;
             margin-bottom: 20px;
@@ -204,7 +202,6 @@
             display: block;
         }
 
-        /* Grade de Botões de Tamanho */
         .tamanhos-grid {
             display: flex;
             justify-content: center;
@@ -223,19 +220,26 @@
             transition: all 0.2s ease;
         }
 
-        .btn-tamanho:hover {
+        .btn-tamanho:hover:not(:disabled) {
             border-color: var(--rosa-principal);
             color: var(--rosa-escuro);
         }
 
-        /* Classe que será aplicada via JavaScript quando clicado */
         .btn-tamanho.selecionado {
             background-color: var(--rosa-principal);
             border-color: var(--rosa-principal);
             color: white;
         }
 
-        /* Campo de Quantidade Ajustado */
+        /* Botão de tamanho sem estoque */
+        .btn-tamanho:disabled {
+            background-color: #e9ecef;
+            border-color: #dee2e6;
+            color: #adb5bd;
+            cursor: not-allowed;
+            text-decoration: line-through;
+        }
+
         .quantidade-container {
             display: flex;
             align-items: center;
@@ -254,11 +258,6 @@
             outline: none;
         }
 
-        .quantidade-container input:focus {
-            border-color: var(--rosa-escuro);
-        }
-
-        /* Botão Adicionar ao Carrinho */
         .btn-comprar {
             background-color: var(--rosa-principal);
             color: var(--branco);
@@ -278,12 +277,19 @@
             box-shadow: 0 5px 15px rgba(255, 143, 163, 0.3);
         }
 
-        .btn-comprar:hover {
+        .btn-comprar:hover:not(:disabled) {
             background-color: var(--rosa-escuro);
             box-shadow: 0 8px 20px rgba(255, 77, 109, 0.4);
         }
 
-        /* JANELA DO CARRINHO LATERAL */
+        /* Botão comprar desativado (Esgotado) */
+        .btn-comprar:disabled {
+            background-color: #adb5bd;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        /* CARRINHO LATERAL */
         .carrinho-lateral {
             position: fixed;
             top: 0;
@@ -399,57 +405,68 @@
             background-color: #20ba59;
         }
 
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.4);
-            z-index: 1500;
+        /* ESTILOS DO PAINEL DE CONTROLE DE ESTOQUE */
+        .admin-painel {
+            background-color: #2b2d42;
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin-top: 40px;
             display: none;
         }
-
-        .overlay.aberto {
+        
+        .admin-painel.visivel {
             display: block;
         }
 
-        .info-section {
-            background-color: var(--branco);
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
-            padding: 40px 20px;
-            margin-top: 50px;
-            border: 1px solid rgba(255, 143, 163, 0.1);
-        }
-
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 20px;
-        }
-
-        .info-bloco {
-            text-align: center;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        .info-bloco h4 {
-            color: var(--rosa-escuro);
-            font-size: 1.2rem;
+        .admin-painel h2 {
             margin-top: 0;
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 700;
+            color: var(--rosa-principal);
+            border-bottom: 1px solid #4a4e69;
+            padding-bottom: 10px;
         }
 
-        .info-bloco p {
-            margin: 0;
+        .tabela-estoque {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            text-align: left;
+        }
+
+        .tabela-estoque th, .tabela-estoque td {
+            padding: 12px;
+            border-bottom: 1px solid #4a4e69;
+        }
+
+        .tabela-estoque input {
+            width: 60px;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .btn-salvar-estoque {
+            background-color: var(--rosa-principal);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .btn-toggle-admin {
+            background: none;
+            border: 1px inline var(--texto-suave);
             color: var(--texto-suave);
-            line-height: 1.6;
-            font-size: 0.95rem;
+            cursor: pointer;
+            padding: 10px;
+            font-size: 0.9rem;
+            margin-top: 20px;
+            text-decoration: underline;
         }
 
         footer {
@@ -497,10 +514,10 @@
                     <div>
                         <span class="opcao-titulo">Escolha o Tamanho:</span>
                         <div class="tamanhos-grid">
-                            <button class="btn-tamanho" onclick="selecionarTamanho(this, 'produto-1')">35</button>
-                            <button class="btn-tamanho" onclick="selecionarTamanho(this, 'produto-1')">36</button>
-                            <button class="btn-tamanho" onclick="selecionarTamanho(this, 'produto-1')">37</button>
-                            <button class="btn-tamanho" onclick="selecionarTamanho(this, 'produto-1')">38</button>
+                            <button class="btn-tamanho" data-tamanho="35" onclick="selecionarTamanho(this, 'produto-1')">35</button>
+                            <button class="btn-tamanho" data-tamanho="36" onclick="selecionarTamanho(this, 'produto-1')">36</button>
+                            <button class="btn-tamanho" data-tamanho="37" onclick="selecionarTamanho(this, 'produto-1')">37</button>
+                            <button class="btn-tamanho" data-tamanho="38" onclick="selecionarTamanho(this, 'produto-1')">38</button>
                         </div>
                     </div>
                     
@@ -510,7 +527,7 @@
                     </div>
                 </div>
 
-                <button class="btn-comprar" onclick="adicionarComOpcoes('Sandália Prime - Modelo 01', 129.99, 'produto-1', 'qtd-p1')">
+                <button class="btn-comprar" id="btn-comprar-p1" onclick="adicionarComOpcoes('Sandália Prime - Modelo 01', 129.99, 'produto-1', 'qtd-p1')">
                     🛍️ Adicionar ao Carrinho
                 </button>
             </div>
@@ -527,10 +544,10 @@
                     <div>
                         <span class="opcao-titulo">Escolha o Tamanho:</span>
                         <div class="tamanhos-grid">
-                            <button class="btn-tamanho" onclick="selecionarTamanho(this, 'produto-2')">35</button>
-                            <button class="btn-tamanho" onclick="selecionarTamanho(this, 'produto-2')">36</button>
-                            <button class="btn-tamanho" onclick="selecionarTamanho(this, 'produto-2')">37</button>
-                            <button class="btn-tamanho" onclick="selecionarTamanho(this, 'produto-2')">38</button>
+                            <button class="btn-tamanho" data-tamanho="35" onclick="selecionarTamanho(this, 'produto-2')">35</button>
+                            <button class="btn-tamanho" data-tamanho="36" onclick="selecionarTamanho(this, 'produto-2')">36</button>
+                            <button class="btn-tamanho" data-tamanho="37" onclick="selecionarTamanho(this, 'produto-2')">37</button>
+                            <button class="btn-tamanho" data-tamanho="38" onclick="selecionarTamanho(this, 'produto-2')">38</button>
                         </div>
                     </div>
                     
@@ -540,90 +557,120 @@
                     </div>
                 </div>
 
-              <!-- Produto 3 -->
-<div class="produto-card" id="produto-3">
-    <div class="img-container">
-        <img src="foto3.png" alt="Sandália Prime Modelo 03">
-    </div>
-    <h3>Sandália Prime</h3>
-    <div class="categoria">Modelo 03</div>
-    <div class="preco">R$ 139,90</div>
-    
-    <div class="produto-opcoes">
-        <div>
-            <span class="opcao-titulo">Escolha o Tamanho:</span>
-            <div class="tamanhos-grid">
-                <button class="btn-tamanho" data-tamanho="35" onclick="selecionarTamanho(this, 'produto-3')">35</button>
-                <button class="btn-tamanho" data-tamanho="36" onclick="selecionarTamanho(this, 'produto-3')">36</button>
-                <button class="btn-tamanho" data-tamanho="37" onclick="selecionarTamanho(this, 'produto-3')">37</button>
-                <button class="btn-tamanho" data-tamanho="38" onclick="selecionarTamanho(this, 'produto-3')">38</button>
+                <button class="btn-comprar" id="btn-comprar-p2" onclick="adicionarComOpcoes('Sandália Prime - Modelo 02', 119.90, 'produto-2', 'qtd-p2')">
+                    🛍️ Adicionar ao Carrinho
+                </button>
             </div>
-        </div>
-        
-        <div class="quantidade-container">
-            <span class="opcao-titulo" style="margin-bottom:0;">Qtd:</span>
-            <input type="number" id="qtd-p3" value="1" min="1" max="10">
-        </div>
-    </div>
 
-    <button class="btn-comprar" id="btn-comprar-p3" onclick="adicionarComOpcoes('Sandália Prime - Modelo 03', 139.90, 'produto-3', 'qtd-p3')">
-        🛍️ Adicionar ao Carrinho
-    </button>
-</div>
+            <div class="produto-card" id="produto-3">
+                <div class="img-container">
+                    <img src="foto3.png" alt="Sandália Prime Modelo 03">
+                </div>
+                <h3>Sandália Prime</h3>
+                <div class="categoria">Modelo 03</div>
+                <div class="preco">R$ 139,90</div>
+                
+                <div class="produto-opcoes">
+                    <div>
+                        <span class="opcao-titulo">Escolha o Tamanho:</span>
+                        <div class="tamanhos-grid">
+                            <button class="btn-tamanho" data-tamanho="35" onclick="selecionarTamanho(this, 'produto-3')">35</button>
+                            <button class="btn-tamanho" data-tamanho="36" onclick="selecionarTamanho(this, 'produto-3')">36</button>
+                            <button class="btn-tamanho" data-tamanho="37" onclick="selecionarTamanho(this, 'produto-3')">37</button>
+                            <button class="btn-tamanho" data-tamanho="38" onclick="selecionarTamanho(this, 'produto-3')">38</button>
+                        </div>
+                    </div>
+                    
+                    <div class="quantidade-container">
+                        <span class="opcao-titulo" style="margin-bottom:0;">Qtd:</span>
+                        <input type="number" id="qtd-p3" value="1" min="1" max="10">
+                    </div>
+                </div>
 
-<!-- Produto 4 -->
-<div class="produto-card" id="produto-4">
-    <div class="img-container">
-        <img src="foto4.png" alt="Sandália Prime Modelo 04">
-    </div>
-    <h3>Sandália Prime</h3>
-    <div class="categoria">Modelo 04</div>
-    <div class="preco">R$ 149,90</div>
-    
-    <div class="produto-opcoes">
-        <div>
-            <span class="opcao-titulo">Escolha o Tamanho:</span>
-            <div class="tamanhos-grid">
-                <button class="btn-tamanho" data-tamanho="35" onclick="selecionarTamanho(this, 'produto-4')">35</button>
-                <button class="btn-tamanho" data-tamanho="36" onclick="selecionarTamanho(this, 'produto-4')">36</button>
-                <button class="btn-tamanho" data-tamanho="37" onclick="selecionarTamanho(this, 'produto-4')">37</button>
-                <button class="btn-tamanho" data-tamanho="38" onclick="selecionarTamanho(this, 'produto-4')">38</button>
+                <button class="btn-comprar" id="btn-comprar-p3" onclick="adicionarComOpcoes('Sandália Prime - Modelo 03', 139.90, 'produto-3', 'qtd-p3')">
+                    🛍️ Adicionar ao Carrinho
+                </button>
             </div>
-        </div>
-        
-        <div class="quantidade-container">
-            <span class="opcao-titulo" style="margin-bottom:0;">Qtd:</span>
-            <input type="number" id="qtd-p4" value="1" min="1" max="10">
-        </div>
-    </div>
 
-    <button class="btn-comprar" id="btn-comprar-p4" onclick="adicionarComOpcoes('Sandália Prime - Modelo 04', 149.90, 'produto-4', 'qtd-p4')">
-        🛍️ Adicionar ao Carrinho
-    </button>
-</div>
+            <div class="produto-card" id="produto-4">
+                <div class="img-container">
+                    <img src="foto4.png" alt="Sandália Prime Modelo 04">
+                </div>
+                <h3>Sandália Prime</h3>
+                <div class="categoria">Modelo 04</div>
+                <div class="preco">R$ 149,90</div>
+                
+                <div class="produto-opcoes">
+                    <div>
+                        <span class="opcao-titulo">Escolha o Tamanho:</span>
+                        <div class="tamanhos-grid">
+                            <button class="btn-tamanho" data-tamanho="35" onclick="selecionarTamanho(this, 'produto-4')">35</button>
+                            <button class="btn-tamanho" data-tamanho="36" onclick="selecionarTamanho(this, 'produto-4')">36</button>
+                            <button class="btn-tamanho" data-tamanho="37" onclick="selecionarTamanho(this, 'produto-4')">37</button>
+                            <button class="btn-tamanho" data-tamanho="38" onclick="selecionarTamanho(this, 'produto-4')">38</button>
+                        </div>
+                    </div>
+                    
+                    <div class="quantidade-container">
+                        <span class="opcao-titulo" style="margin-bottom:0;">Qtd:</span>
+                        <input type="number" id="qtd-p4" value="1" min="1" max="10">
+                    </div>
+                </div>
 
-                <button class="btn-comprar" onclick="adicionarComOpcoes('Sandália Prime - Modelo 02', 119.90, 'produto-2', 'qtd-p2')">
+                <button class="btn-comprar" id="btn-comprar-p4" onclick="adicionarComOpcoes('Sandália Prime - Modelo 04', 149.90, 'produto-4', 'qtd-p4')">
                     🛍️ Adicionar ao Carrinho
                 </button>
             </div>
 
         </div>
 
-        <div class="info-section">
-            <div class="info-grid">
-                <div class="info-bloco">
-                    <h4>Formas de Pagamento</h4>
-                    <p>Aceitamos Pix, Cartão de Crédito em até 3x e Boleto Bancário.</p>
-                </div>
-                <div class="info-bloco">
-                    <h4>Prazo e Envio</h4>
-                    <p>Enviamos para todo o Brasil via Correios. Entrega rápida e garantida.</p>
-                </div>
-                <div class="info-bloco">
-                    <h4>Atendimento</h4>
-                    <p>Ficou com dúvidas sobre tamanhos ou modelos? Chame nossa equipe agora mesmo.</p>
-                </div>
-            </div>
+        <center><button class="btn-toggle-admin" onclick="togglePainelAdmin()">⚙️ Abrir Painel de Controle de Estoque</button></center>
+        
+        <div class="admin-painel" id="admin-painel">
+            <h2>⚙️ Painel de Controle de Estoque (Simulado)</h2>
+            <p>Altere os valores abaixo para testar o comportamento do site quando o estoque acaba:</p>
+            <table class="tabela-estoque">
+                <thead>
+                    <tr>
+                        <th>Produto</th>
+                        <th>Tam. 35</th>
+                        <th>Tam. 36</th>
+                        <th>Tam. 37</th>
+                        <th>Tam. 38</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Sandália Modelo 01</td>
+                        <td><input type="number" id="est-p1-35"></td>
+                        <td><input type="number" id="est-p1-36"></td>
+                        <td><input type="number" id="est-p1-37"></td>
+                        <td><input type="number" id="est-p1-38"></td>
+                    </tr>
+                    <tr>
+                        <td>Sandália Modelo 02</td>
+                        <td><input type="number" id="est-p2-35"></td>
+                        <td><input type="number" id="est-p2-36"></td>
+                        <td><input type="number" id="est-p2-37"></td>
+                        <td><input type="number" id="est-p2-38"></td>
+                    </tr>
+                    <tr>
+                        <td>Sandália Modelo 03</td>
+                        <td><input type="number" id="est-p3-35"></td>
+                        <td><input type="number" id="est-p3-36"></td>
+                        <td><input type="number" id="est-p3-37"></td>
+                        <td><input type="number" id="est-p3-38"></td>
+                    </tr>
+                    <tr>
+                        <td>Sandália Modelo 04</td>
+                        <td><input type="number" id="est-p4-35"></td>
+                        <td><input type="number" id="est-p4-36"></td>
+                        <td><input type="number" id="est-p4-37"></td>
+                        <td><input type="number" id="est-p4-38"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class="btn-salvar-estoque" onclick="salvarEstoquePainel()">Salvar Alterações de Estoque</button>
         </div>
 
     </div>
@@ -656,49 +703,112 @@
     <script>
         let carrinho = [];
 
+        // Estoque Padrão Inicial (Se não houver nada salvo no navegador)
+        let estoque = {
+            "produto-1": { "35": 5, "36": 4, "37": 3, "38": 2 },
+            "produto-2": { "35": 2, "36": 5, "37": 0, "38": 4 },
+            "produto-3": { "35": 5, "36": 5, "37": 5, "38": 5 },
+            "produto-4": { "35": 5, "36": 5, "37": 5, "38": 5 }
+        };
+
+        // Carrega o estoque guardado no navegador ao abrir o site
+        if(localStorage.getItem('estoquePrime')) {
+            estoque = JSON.parse(localStorage.getItem('estoquePrime'));
+            
+            // Garante que novos produtos existam no estoque caso o localStorage seja antigo
+            if (!estoque["produto-3"]) estoque["produto-3"] = { "35": 5, "36": 5, "37": 5, "38": 5 };
+            if (!estoque["produto-4"]) estoque["produto-4"] = { "35": 5, "36": 5, "37": 5, "38": 5 };
+        } else {
+            localStorage.setItem('estoquePrime', JSON.stringify(estoque));
+        }
+
+        // Executa ao carregar a página
+        window.onload = function() {
+            atualizarInterfaceEstoque();
+            preencherCamposPainel();
+        }
+
         function toggleCarrinho() {
             document.getElementById('carrinho-lateral').classList.toggle('aberto');
             document.getElementById('overlay').classList.toggle('aberto');
         }
 
-        // Controla visualmente qual botão de tamanho está ativo dentro de cada card
+        function togglePainelAdmin() {
+            document.getElementById('admin-painel').classList.toggle('visivel');
+        }
+
+        // Desativa visualmente botões cujos tamanhos estão zerados no estoque
+        function atualizarInterfaceEstoque() {
+            for (let idProd in estoque) {
+                const card = document.getElementById(idProd);
+                if (!card) continue;
+                
+                let todosEsgotados = true;
+                const botoes = card.querySelectorAll('.btn-tamanho');
+                
+                botoes.forEach(btn => {
+                    const tam = btn.getAttribute('data-tamanho');
+                    const qtdDisponivel = estoque[idProd][tam];
+                    
+                    if (qtdDisponivel <= 0) {
+                        btn.disabled = true;
+                        btn.classList.remove('selecionado');
+                    } else {
+                        btn.disabled = false;
+                        todosEsgotados = false;
+                    }
+                });
+
+                // Se não houver nenhum tamanho disponível, desativa o botão de compra do card
+                const btnComprar = card.querySelector('.btn-comprar');
+                if (todosEsgotados) {
+                    btnComprar.disabled = true;
+                    btnComprar.innerText = "❌ PRODUTO ESGOTADO";
+                } else {
+                    btnComprar.disabled = false;
+                    btnComprar.innerText = "🛍️ Adicionar ao Carrinho";
+                }
+            }
+        }
+
         function selecionarTamanho(botaoClicado, idCardProduto) {
             const card = document.getElementById(idCardProduto);
-            // Remove a seleção de qualquer outro botão de tamanho deste card específico
             const botoesDoCard = card.querySelectorAll('.btn-tamanho');
             botoesDoCard.forEach(btn => btn.classList.remove('selecionado'));
-            
-            // Adiciona a classe selecionado apenas ao botão clicado
             botaoClicado.classList.add('selecionado');
         }
 
-        // Lê as opções selecionadas e valida se o tamanho foi escolhido
         function adicionarComOpcoes(nome, preco, idCardProduto, idQuantidade) {
             const card = document.getElementById(idCardProduto);
             const botaoTamanhoSelecionado = card.querySelector('.btn-tamanho.selecionado');
             
-            // Valida se o usuário clicou em algum tamanho
             if (!botaoTamanhoSelecionado) {
-                alert("Por favor, selecione um tamanho (35 ao 38) antes de adicionar ao carrinho!");
+                alert("Por favor, selecione um tamanho antes de adicionar ao carrinho!");
                 return;
             }
 
             const tamanho = botaoTamanhoSelecionado.innerText;
-            const quantidade = parseInt(document.getElementById(idQuantidade).value) || 1;
+            const quantidadeDesejada = parseInt(document.getElementById(idQuantidade).value) || 1;
             
-            if (quantidade < 1) {
+            if (quantidadeDesejada < 1) {
                 alert("Por favor, insira uma quantidade válida.");
                 return;
             }
 
-            adicionarAoCarrinho(nome, preco, tamanho, quantidade);
+            // Verifica se a quantidade desejada bate com o estoque disponível atual
+            const estoqueDisponivel = estoque[idCardProduto][tamanho];
+            if (quantidadeDesejada > estoqueDisponivel) {
+                alert(`Desculpe! Temos apenas ${estoqueDisponivel} unidades do tamanho ${tamanho} em estoque.`);
+                return;
+            }
+
+            adicionarAoCarrinho(nome, preco, tamanho, quantidadeDesejada, idCardProduto);
             
-            // Limpa a seleção do tamanho e reseta a quantidade após adicionar
             botaoTamanhoSelecionado.classList.remove('selecionado');
             document.getElementById(idQuantidade).value = 1;
         }
 
-        function adicionarAoCarrinho(nome, preco, tamanho, quantidade) {
+        function adicionarAoCarrinho(nome, preco, tamanho, quantidade, idCardProduto) {
             const itemExistente = carrinho.find(item => item.nome === nome && item.tamanho === tamanho);
             
             if (itemExistente) {
@@ -708,7 +818,8 @@
                     nome: nome, 
                     preco: preco, 
                     tamanho: tamanho, 
-                    quantidade: quantidade 
+                    quantidade: quantidade,
+                    idCardProduto: idCardProduto // salvo para saber qual produto dar baixa
                 });
             }
             atualizarCarrinho();
@@ -761,6 +872,22 @@
                 event.preventDefault();
                 return;
             }
+
+            // --- AQUI ACONTECE A BAIXA AUTOMÁTICA NO ESTOQUE ---
+            carrinho.forEach(item => {
+                estoque[item.idCardProduto][item.tamanho] -= item.quantidade;
+                if (estoque[item.idCardProduto][item.tamanho] < 0) {
+                    estoque[item.idCardProduto][item.tamanho] = 0;
+                }
+            });
+
+            // Salva o novo estoque atualizado no navegador
+            localStorage.setItem('estoquePrime', JSON.stringify(estoque));
+            
+            // Atualiza as telas e campos
+            atualizarInterfaceEstoque();
+            preencherCamposPainel();
+
             let numeroTelefone = '5589981527374';
             let textoMensagem = 'Olá, Prime Store! Gostaria de fazer o seguinte pedido:\n\n';
             let totalGeral = 0;
@@ -771,7 +898,61 @@
             });
             
             textoMensagem += `*Valor Total:* R$ ${totalGeral.toFixed(2).replace('.', ',')}`;
+            
+            // Limpa o carrinho após a venda ser processada
+            carrinho = [];
+            atualizarCarrinho();
+
             document.getElementById('btn-enviar-whatsapp').href = `https://wa.me/${numeroTelefone}?text=${encodeURIComponent(textoMensagem)}`;
+        }
+
+        // --- FUNÇÕES DO PAINEL ADMIN DE ESTOQUE ---
+        function preencherCamposPainel() {
+            document.getElementById('est-p1-35').value = estoque["produto-1"]["35"];
+            document.getElementById('est-p1-36').value = estoque["produto-1"]["36"];
+            document.getElementById('est-p1-37').value = estoque["produto-1"]["37"];
+            document.getElementById('est-p1-38').value = estoque["produto-1"]["38"];
+
+            document.getElementById('est-p2-35').value = estoque["produto-2"]["35"];
+            document.getElementById('est-p2-36').value = estoque["produto-2"]["36"];
+            document.getElementById('est-p2-37').value = estoque["produto-2"]["37"];
+            document.getElementById('est-p2-38').value = estoque["produto-2"]["38"];
+
+            document.getElementById('est-p3-35').value = estoque["produto-3"]["35"];
+            document.getElementById('est-p3-36').value = estoque["produto-3"]["36"];
+            document.getElementById('est-p3-37').value = estoque["produto-3"]["37"];
+            document.getElementById('est-p3-38').value = estoque["produto-3"]["38"];
+
+            document.getElementById('est-p4-35').value = estoque["produto-4"]["35"];
+            document.getElementById('est-p4-36').value = estoque["produto-4"]["36"];
+            document.getElementById('est-p4-37').value = estoque["produto-4"]["37"];
+            document.getElementById('est-p4-38').value = estoque["produto-4"]["38"];
+        }
+
+        function salvarEstoquePainel() {
+            estoque["produto-1"]["35"] = parseInt(document.getElementById('est-p1-35').value) || 0;
+            estoque["produto-1"]["36"] = parseInt(document.getElementById('est-p1-36').value) || 0;
+            estoque["produto-1"]["37"] = parseInt(document.getElementById('est-p1-37').value) || 0;
+            estoque["produto-1"]["38"] = parseInt(document.getElementById('est-p1-38').value) || 0;
+
+            estoque["produto-2"]["35"] = parseInt(document.getElementById('est-p2-35').value) || 0;
+            estoque["produto-2"]["36"] = parseInt(document.getElementById('est-p2-36').value) || 0;
+            estoque["produto-2"]["37"] = parseInt(document.getElementById('est-p2-37').value) || 0;
+            estoque["produto-2"]["38"] = parseInt(document.getElementById('est-p2-38').value) || 0;
+
+            estoque["produto-3"]["35"] = parseInt(document.getElementById('est-p3-35').value) || 0;
+            estoque["produto-3"]["36"] = parseInt(document.getElementById('est-p3-36').value) || 0;
+            estoque["produto-3"]["37"] = parseInt(document.getElementById('est-p3-37').value) || 0;
+            estoque["produto-3"]["38"] = parseInt(document.getElementById('est-p3-38').value) || 0;
+
+            estoque["produto-4"]["35"] = parseInt(document.getElementById('est-p4-35').value) || 0;
+            estoque["produto-4"]["36"] = parseInt(document.getElementById('est-p4-36').value) || 0;
+            estoque["produto-4"]["37"] = parseInt(document.getElementById('est-p4-37').value) || 0;
+            estoque["produto-4"]["38"] = parseInt(document.getElementById('est-p4-38').value) || 0;
+
+            localStorage.setItem('estoquePrime', JSON.stringify(estoque));
+            atualizarInterfaceEstoque();
+            alert("Estoque atualizado com sucesso!");
         }
     </script>
 </body>

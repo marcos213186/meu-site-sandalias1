@@ -540,6 +540,68 @@
                     </div>
                 </div>
 
+              <!-- Produto 3 -->
+<div class="produto-card" id="produto-3">
+    <div class="img-container">
+        <img src="foto3.png" alt="Sandália Prime Modelo 03">
+    </div>
+    <h3>Sandália Prime</h3>
+    <div class="categoria">Modelo 03</div>
+    <div class="preco">R$ 139,90</div>
+    
+    <div class="produto-opcoes">
+        <div>
+            <span class="opcao-titulo">Escolha o Tamanho:</span>
+            <div class="tamanhos-grid">
+                <button class="btn-tamanho" data-tamanho="35" onclick="selecionarTamanho(this, 'produto-3')">35</button>
+                <button class="btn-tamanho" data-tamanho="36" onclick="selecionarTamanho(this, 'produto-3')">36</button>
+                <button class="btn-tamanho" data-tamanho="37" onclick="selecionarTamanho(this, 'produto-3')">37</button>
+                <button class="btn-tamanho" data-tamanho="38" onclick="selecionarTamanho(this, 'produto-3')">38</button>
+            </div>
+        </div>
+        
+        <div class="quantidade-container">
+            <span class="opcao-titulo" style="margin-bottom:0;">Qtd:</span>
+            <input type="number" id="qtd-p3" value="1" min="1" max="10">
+        </div>
+    </div>
+
+    <button class="btn-comprar" id="btn-comprar-p3" onclick="adicionarComOpcoes('Sandália Prime - Modelo 03', 139.90, 'produto-3', 'qtd-p3')">
+        🛍️ Adicionar ao Carrinho
+    </button>
+</div>
+
+<!-- Produto 4 -->
+<div class="produto-card" id="produto-4">
+    <div class="img-container">
+        <img src="foto4.png" alt="Sandália Prime Modelo 04">
+    </div>
+    <h3>Sandália Prime</h3>
+    <div class="categoria">Modelo 04</div>
+    <div class="preco">R$ 149,90</div>
+    
+    <div class="produto-opcoes">
+        <div>
+            <span class="opcao-titulo">Escolha o Tamanho:</span>
+            <div class="tamanhos-grid">
+                <button class="btn-tamanho" data-tamanho="35" onclick="selecionarTamanho(this, 'produto-4')">35</button>
+                <button class="btn-tamanho" data-tamanho="36" onclick="selecionarTamanho(this, 'produto-4')">36</button>
+                <button class="btn-tamanho" data-tamanho="37" onclick="selecionarTamanho(this, 'produto-4')">37</button>
+                <button class="btn-tamanho" data-tamanho="38" onclick="selecionarTamanho(this, 'produto-4')">38</button>
+            </div>
+        </div>
+        
+        <div class="quantidade-container">
+            <span class="opcao-titulo" style="margin-bottom:0;">Qtd:</span>
+            <input type="number" id="qtd-p4" value="1" min="1" max="10">
+        </div>
+    </div>
+
+    <button class="btn-comprar" id="btn-comprar-p4" onclick="adicionarComOpcoes('Sandália Prime - Modelo 04', 149.90, 'produto-4', 'qtd-p4')">
+        🛍️ Adicionar ao Carrinho
+    </button>
+</div>
+
                 <button class="btn-comprar" onclick="adicionarComOpcoes('Sandália Prime - Modelo 02', 119.90, 'produto-2', 'qtd-p2')">
                     🛍️ Adicionar ao Carrinho
                 </button>
